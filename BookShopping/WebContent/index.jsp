@@ -8,6 +8,16 @@
 </head>
 <body>
 	<!-- create forms for book editing -->
+	<table>
+		<tr>
+			<th>Book No.</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Publisher</th>
+			<th>Year</th>
+			<th>Price</th>
+		</tr>
+	</table>
 	
 </body>
 </html>
