@@ -21,6 +21,9 @@
 	<form>
 	<%
 		out.println(request.getAttribute("table"));
+		Object o = request.getAttribute("message");
+		if (o != null)
+			out.println(o);
 	%>
 	</form>
 	<form action="/BookShopping/BookUpdate" method="post">

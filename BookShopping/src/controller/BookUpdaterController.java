@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -86,46 +87,46 @@ public class BookUpdaterController extends HttpServlet {
 		hm.put(pubCol, pub);
 		hm.put(yearCol, year);
 		hm.put(priceCol, price);
-		
+		String message = "";
 		if (rType.equals("delete")) {
 			try {
-				response.getWriter().append(db.saveData(table, idCol, id));
+				 message = db.saveData(table, idCol, id);
 				
 			} catch (DBExceptions e) {
 				// TODO Auto-generated catch block
-				response.getWriter().append("Something went wrong.");
+				message = "Something went wrong.";
 				e.printStackTrace();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				response.getWriter().append("Something went wrong.");
+				message ="Something went wrong.";
 				e.printStackTrace();
 			}
 		} else if (rType.equals("add")) {
 			try {
-				response.getWriter().append(db.saveData(table, hm));
+				message = db.saveData(table, hm);
 			} catch (DBExceptions e) {
 				// TODO Auto-generated catch block
-				response.getWriter().append("Something went wrong.");
+				message = "Something went wrong.";
 				e.printStackTrace();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				response.getWriter().append("Something went wrong.");
+				message = "Something went wrong.";
 				e.printStackTrace();
 			}
 		} else if (rType.equals("update")) {
 			try {
 				hm.remove(idCol);
-				response.getWriter().append(db.saveData(table, hm, idCol, id));
+				message = db.saveData(table, hm, idCol, id);
 			} catch (DBExceptions e) {
-				response.getWriter().append("Something went wrong.");
+				message = "Something went wrong.";
 				e.printStackTrace();
 			} catch (SQLException e) {
-				response.getWriter().append("Something went wrong.");
+				message = "Something went wrong.";
 				e.printStackTrace();
 			}
 		}
-		response.sendRedirect(request.getContextPath() + "/");
-		
+		response.getWriter().append(message);
+		response.setHeader("Refresh", "0; URL=/BookShopping/");
 	}
 
 }

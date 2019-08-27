@@ -84,6 +84,7 @@ public class BookShopController extends HttpServlet {
 		requestDispatcher = request.getRequestDispatcher("/WEB-INF/index.jsp");
 		request.setAttribute("table", tablePrint());
 		requestDispatcher.forward(request, response);
+		
 //		HashMap<String, String> hm = new HashMap<String, String>();
 //		hm.put("title", "booktitle");
 //		hm.put("authors", "bookauthor");
