@@ -12,6 +12,7 @@ local.properties
 .recommenders
 .classpath
 .project
+*.zip
 MANIFEST.MF
 # External tool builders
 .externalToolBuilders/
