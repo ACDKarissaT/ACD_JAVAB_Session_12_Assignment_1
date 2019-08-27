@@ -1,12 +1,18 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import db.DB;
+import db.DBExceptions;
 
 /**
  * Servlet implementation class BookUpdaterController
@@ -22,12 +28,27 @@ public class BookUpdaterController extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
+    
+    DB db;
+    String table = "books";
+    String idCol = "book_id";
+    String titleCol = "title";
+    String authorCol = "authors";
+    String pubCol = "publisher";
+    String yearCol = "publication_year";
+    String priceCol = "price";
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
 	public void init(ServletConfig config) throws ServletException {
 		// TODO Auto-generated method stub
+		db = new DB("C:\\Users\\kurwhibble\\Documents\\Renrgyx\\Repositories\\OnlineBooks\\BookShopping\\app.properties");
+		try {
+			db.connect();
+		} catch (DBExceptions e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -42,7 +63,6 @@ public class BookUpdaterController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -50,7 +70,62 @@ public class BookUpdaterController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String id = request.getParameter("bID");
+		String title = request.getParameter("bTitle");
+		String author = request.getParameter("bAuthor");
+		String pub = request.getParameter("bPub");
+		String year = request.getParameter("bYear");
+		String price = request.getParameter("bPrice");
+		String rType = request.getParameter("type");
+		HashMap<String, String> hm = new HashMap<String,String>();
+		if (id != null && !id.isEmpty()) {
+			hm.put(idCol, id);
+		}
+		hm.put(titleCol, title);
+		hm.put(authorCol, author);
+		hm.put(pubCol, pub);
+		hm.put(yearCol, year);
+		hm.put(priceCol, price);
+		
+		if (rType.equals("delete")) {
+			try {
+				response.getWriter().append(db.saveData(table, idCol, id));
+				
+			} catch (DBExceptions e) {
+				// TODO Auto-generated catch block
+				response.getWriter().append("Something went wrong.");
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				response.getWriter().append("Something went wrong.");
+				e.printStackTrace();
+			}
+		} else if (rType.equals("add")) {
+			try {
+				response.getWriter().append(db.saveData(table, hm));
+			} catch (DBExceptions e) {
+				// TODO Auto-generated catch block
+				response.getWriter().append("Something went wrong.");
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				response.getWriter().append("Something went wrong.");
+				e.printStackTrace();
+			}
+		} else if (rType.equals("update")) {
+			try {
+				hm.remove(idCol);
+				response.getWriter().append(db.saveData(table, hm, idCol, id));
+			} catch (DBExceptions e) {
+				response.getWriter().append("Something went wrong.");
+				e.printStackTrace();
+			} catch (SQLException e) {
+				response.getWriter().append("Something went wrong.");
+				e.printStackTrace();
+			}
+		}
+		response.sendRedirect(request.getContextPath() + "/");
+		
 	}
 
 }
